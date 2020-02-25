@@ -1081,7 +1081,7 @@ function search_and_list_tasks($request_params)
 
 function select_and_list_tasks($sql_condition)
 {
-    global $tasks_url, $pguser;
+    global $tasks_url, $pguser, $requester_id;
 
     $columns = array(
         'task_id'          => " style='text-align: center;'",
@@ -1092,8 +1092,9 @@ function select_and_list_tasks($sql_condition)
         'date_edited'      => " style='text-align: center;'",
         'task_status'      => "",
         'votes'            => "",
-        'percent_complete' => "",
+        'voted' => "",
         'notification_status' => "",
+        'percent_complete' => "",
     );
 
     $curr_sort_dir = get_enumerated_param($_GET, 'direction', 'desc', array('asc', 'desc'));
@@ -1109,9 +1110,11 @@ function select_and_list_tasks($sql_condition)
           task_status,
           percent_complete,
           COUNT(vote_os) AS votes,
+               
           (usersettings.username IS NOT NULL) AS notification_status
         FROM tasks
-          LEFT OUTER JOIN tasks_votes USING (task_id)
+          LEFT OUTER JOIN tasks_votes USING (tasks.task_id)
+          LEFT OUTER JOIN tasks_votes AS voted ON voted.task_id = tasks.task_id AND voted.u_id = $requester_id
           LEFT OUTER JOIN usersettings ON usersettings.username = '$pguser' AND usersettings.value = task_id
         WHERE $sql_condition
         GROUP BY task_id
@@ -1767,6 +1770,8 @@ function property_get_label( $property_id, $for_list_of_tasks )
         case 'edited_composite'   : return "Last Edited";
         case 'closed_composite'   : return "Closed By";
         case 'closed_reason'      : return "Closed Reason";
+
+        case 'voted': return 'Voted';
         case 'notification_status': return 'Notifications';
 
         case 'percent_complete':
@@ -1803,7 +1808,11 @@ function property_format_value($property_id, $task_a, $for_list_of_tasks)
         case 'task_status'   : return $tasks_status_array[$raw_value];
         case 'task_type'     : return $tasks_array[$raw_value];
         case 'task_version'  : return $versions_array[$raw_value];
-        case 'notification_status' : return $raw_value ? '&check;' : '';
+
+        case 'notification_status' :
+        case 'voted' :
+            return $raw_value ? '&check;' : '';
+
 
         // The raw value is an integer denoting seconds-since-epoch.
         case 'date_edited' : return date("d-M-Y", $raw_value);
