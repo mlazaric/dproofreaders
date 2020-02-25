@@ -1093,6 +1093,7 @@ function select_and_list_tasks($sql_condition)
         'task_status'      => "",
         'votes'            => "",
         'percent_complete' => "",
+        'notification_status' => "",
     );
 
     $curr_sort_dir = get_enumerated_param($_GET, 'direction', 'desc', array('asc', 'desc'));
