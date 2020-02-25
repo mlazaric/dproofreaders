@@ -1081,7 +1081,7 @@ function search_and_list_tasks($request_params)
 
 function select_and_list_tasks($sql_condition)
 {
-    global $tasks_url, $pguser, $requester_id;
+    global $tasks_url, $pguser, $requester_u_id;
 
     $columns = array(
         'task_id'          => " style='text-align: center;'",
@@ -1114,7 +1114,7 @@ function select_and_list_tasks($sql_condition)
           (usersettings.username IS NOT NULL) AS notification_status
         FROM tasks
           LEFT OUTER JOIN tasks_votes USING (task_id)
-          LEFT OUTER JOIN tasks_votes AS voted ON voted.task_id = tasks.task_id AND voted.u_id = $requester_id
+          LEFT OUTER JOIN tasks_votes AS voted ON voted.task_id = tasks.task_id AND voted.u_id = $requester_u_id
           LEFT OUTER JOIN usersettings ON usersettings.username = '$pguser' AND usersettings.value = tasks.task_id
         WHERE $sql_condition
         GROUP BY tasks.task_id
