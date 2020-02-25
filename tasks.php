@@ -1115,9 +1115,9 @@ function select_and_list_tasks($sql_condition)
         FROM tasks
           LEFT OUTER JOIN tasks_votes USING (tasks.task_id)
           LEFT OUTER JOIN tasks_votes AS voted ON voted.task_id = tasks.task_id AND voted.u_id = $requester_id
-          LEFT OUTER JOIN usersettings ON usersettings.username = '$pguser' AND usersettings.value = task_id
+          LEFT OUTER JOIN usersettings ON usersettings.username = '$pguser' AND usersettings.value = tasks.task_id
         WHERE $sql_condition
-        GROUP BY task_id
+        GROUP BY tasks.task_id
         ORDER BY $curr_sort_col $curr_sort_dir
     ";
     $sql_result = wrapped_mysql_query($sql_query);
