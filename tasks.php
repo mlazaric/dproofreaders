@@ -1109,7 +1109,7 @@ function select_and_list_tasks($sql_condition)
           date_edited,
           task_status,
           percent_complete,
-          COUNT(vote_os) AS votes,
+          COUNT(tasks_votes.vote_os) AS votes,
           (voted.task_id IS NOT NULL) AS voted,
           (usersettings.username IS NOT NULL) AS notification_status
         FROM tasks
