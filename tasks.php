@@ -1114,7 +1114,7 @@ function select_and_list_tasks($sql_condition)
           (usersettings.username IS NOT NULL) AS notification_status
         FROM tasks
           LEFT OUTER JOIN tasks_votes USING (tasks.task_id)
-          LEFT OUTER JOIN tasks_votes AS voted ON voted.task_id = tasks.task_id AND voted.u_id = $requester_id
+          LEFT OUTER JOIN tasks_votes voted ON voted.task_id = tasks.task_id AND voted.u_id = $requester_id
           LEFT OUTER JOIN usersettings ON usersettings.username = '$pguser' AND usersettings.value = tasks.task_id
         WHERE $sql_condition
         GROUP BY tasks.task_id
