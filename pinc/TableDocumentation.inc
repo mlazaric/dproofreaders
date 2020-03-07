@@ -134,7 +134,7 @@ class TableDocumentation
             }
         }
 
-        $missing_column_names = array_diff($encountered_columns, $column_names);
+        $missing_column_names = array_diff($column_names, $encountered_columns);
 
         foreach ($missing_column_names as $index => $column_name) {
             $lines_with_updated_column_definitions[] = "## `$column_name`\n\n";
