@@ -3,7 +3,7 @@
 $relPath='../pinc/';
 include_once($relPath.'base.inc');
 include_once($relPath.'misc.inc');
-include_once($relPath.'TableDocumentation.php');
+include_once($relPath . 'TableDocumentation.inc');
 
 // First is the script name, the second is the operation name
 $number_of_arguments = $argc - 2;
