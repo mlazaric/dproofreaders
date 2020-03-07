@@ -108,6 +108,6 @@ class TableDocumentation
      */
     public static function detect_columns_in_text(array $lines): array {
         // array_values is used to reindex the array
-        return array_values(preg_filter('/^## ([a-zA-Z0-9_]+)/', '$1', $lines));
+        return array_values(preg_filter('/^## `([a-zA-Z0-9_]+)`/', '$1', $lines));
     }
 }

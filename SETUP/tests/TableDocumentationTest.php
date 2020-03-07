@@ -16,8 +16,8 @@ class TableDocumentationTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(implode("\n", [
             '# display_table1',
             '',
-            '|Field            |Type |Null |Key |Default |Extra |',
-            '|-----------------|-----|-----|----|--------|------|',
+            '|Field              |Type |Null |Key |Default |Extra |',
+            '|-------------------|-----|-----|----|--------|------|',
             '|[`field1`](#field1)|type1|null1|key1|default1|extra1|',
             '|[`field2`](#field2)|type2|null2|key2|default2|extra2|',
             '|[`field3`](#field3)|type3|null3|key3|default3|extra3|',
@@ -139,9 +139,9 @@ class TableDocumentationTest extends PHPUnit\Framework\TestCase
             'secondcolumn',
             'thirdcolumn'
         ], TableDocumentation::detect_columns_in_text([
-            '## firstcolumn',
-            '## secondcolumn',
-            '## thirdcolumn'
+            '## `firstcolumn`',
+            '## `secondcolumn`',
+            '## `thirdcolumn`'
         ]));
     }
 
@@ -152,9 +152,9 @@ class TableDocumentationTest extends PHPUnit\Framework\TestCase
             'second_column',
             'third_column'
         ], TableDocumentation::detect_columns_in_text([
-            '## first_column',
-            '## second_column',
-            '## third_column'
+            '## `first_column`',
+            '## `second_column`',
+            '## `third_column`'
         ]));
     }
 
@@ -165,12 +165,12 @@ class TableDocumentationTest extends PHPUnit\Framework\TestCase
             'second_column',
             'third_column',
         ], TableDocumentation::detect_columns_in_text([
-            '## first_column',
+            '## `first_column`',
             'here is the description of the first column...',
-            '## second_column',
+            '## `second_column`',
             'here is the descriptio of the second column,',
             'which doesn\' fit in one line...',
-            '## third_column',
+            '## `third_column`',
             'and here is the description of the third column'
         ]));
     }
