@@ -14,7 +14,7 @@ class TableDocumentationTest extends PHPUnit\Framework\TestCase
         $table_documentation = TableDocumentation::from_table_description('display_table1', self::TABLE_DESCRIPTION);
 
         $this->assertEquals(implode("\n", [
-            '# display_table1',
+            '# `display_table1`',
             '',
             '|Field              |Type |Null |Key |Default |Extra |',
             '|-------------------|-----|-----|----|--------|------|',
@@ -116,6 +116,61 @@ class TableDocumentationTest extends PHPUnit\Framework\TestCase
             [ 'column1' => 'short_value3', 'column2' => 'value123' ]
         ], [ 'column1' ]));
     }
+
+    // detect_first_table_in_text
+    public function testDetectFirstTableWithDocumentationOutput() {
+        $this->assertEquals([
+            '|Field              |Type |Null |Key |Default |Extra |',
+            '|-------------------|-----|-----|----|--------|------|',
+            '|[`field1`](#field1)|type1|null1|key1|default1|extra1|',
+            '|[`field2`](#field2)|type2|null2|key2|default2|extra2|',
+            '|[`field3`](#field3)|type3|null3|key3|default3|extra3|',
+        ], TableDocumentation::detect_first_table_in_text([
+            '# `display_table1`',
+            '',
+            '|Field              |Type |Null |Key |Default |Extra |',
+            '|-------------------|-----|-----|----|--------|------|',
+            '|[`field1`](#field1)|type1|null1|key1|default1|extra1|',
+            '|[`field2`](#field2)|type2|null2|key2|default2|extra2|',
+            '|[`field3`](#field3)|type3|null3|key3|default3|extra3|',
+            '',
+            '## `field1`',
+            '',
+            '## `field2`',
+            '',
+            '## `field3`',
+            '',
+        ]));
+    }
+
+    public function testDetectFirstTableWithDocumentationOutputContainingAnotherTable() {
+        $this->assertEquals([
+            '|Field              |Type |Null |Key |Default |Extra |',
+            '|-------------------|-----|-----|----|--------|------|',
+            '|[`field1`](#field1)|type1|null1|key1|default1|extra1|',
+            '|[`field2`](#field2)|type2|null2|key2|default2|extra2|',
+            '|[`field3`](#field3)|type3|null3|key3|default3|extra3|',
+        ], TableDocumentation::detect_first_table_in_text([
+            '# `display_table1`',
+            '',
+            '|Field              |Type |Null |Key |Default |Extra |',
+            '|-------------------|-----|-----|----|--------|------|',
+            '|[`field1`](#field1)|type1|null1|key1|default1|extra1|',
+            '|[`field2`](#field2)|type2|null2|key2|default2|extra2|',
+            '|[`field3`](#field3)|type3|null3|key3|default3|extra3|',
+            '',
+            '## `field1`',
+            '|Field1  |Field2  | Field3  |',
+            '|--------|--------|---------|',
+            '|Value1__|Value2__|Value3___|',
+            '',
+            '## `field2`',
+            '',
+            '## `field3`',
+            '',
+        ]));
+    }
+
 
     // detect_columns_in_text
     public function testDetectColumnsWithNoLines()

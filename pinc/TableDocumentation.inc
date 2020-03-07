@@ -19,9 +19,37 @@ class TableDocumentation
 
     public static function from_string(string $to_parse): TableDocumentation
     {
+        $lines = explode("\n", $to_parse);
 
+        $display_name = preg_replace('/^# `([$a-zA-Z0-9_]+)`$/', $lines[0]);
+
+        $table_lines = TableDocumentation::detect_first_table_in_text($lines);
+        $headers = [];
+        $columns_information = [];
+
+        foreach ($table_lines as $index => $line) {
+            if ($index === 0) {
+                // First row contains headers
+                $headers = array_splice(explode('|', $line), 1, -1);
+            }
+            else if ($index === 1) {
+                // Second row is |-----|----|
+                continue;
+            }
+            else {
+                $row = array_splice(explode('|', $line), 1, -1);
+                $column_information = [];
+
+                foreach ($headers as $header_index => $header) {
+                    $column_information[$header] = $row[$header_index];
+                }
+
+                $columns_information[] = $column_information;
+            }
+        }
+
+        return new TableDocumentation($display_name, $columns_information);
     }
-
 
     public function __toString(): string
     {
@@ -35,7 +63,7 @@ class TableDocumentation
             $columns_information[$index]['Field'] = "[`$field`](#$field)";
         }
 
-        $lines = ['# ' . $this->display_name, ''];
+        $lines = ['# `' . $this->display_name, '`'];
         $lines = array_merge($lines, TableDocumentation::create_markdown_table($columns_information, [ 'Field', 'Type', 'Null', 'Key', 'Default', 'Extra' ]));
 
         // Add column definitions
@@ -57,7 +85,8 @@ class TableDocumentation
      * @param array $table_columns the columns to display
      * @return array array of strings -- the generate markdown table
      */
-    public static function create_markdown_table(array $contents, array $table_columns): array {
+    public static function create_markdown_table(array $contents, array $table_columns): array
+    {
         // For each column find the length of the longest value (used for padding in the table)
         $column_lengths = [];
 
@@ -95,18 +124,34 @@ class TableDocumentation
         return $output_table;
     }
 
+    public static function detect_first_table_in_text(array $lines): array {
+        $first_table_lines = [];
+
+        foreach ($lines as $index => $line) {
+            if (startswith('|', $line)) {
+                $first_table_lines[] = $line;
+            }
+            else if (count($first_table_lines) > 0) {
+                break;
+            }
+        }
+
+        return $first_table_lines;
+    }
+
     /**
      * Detects columns in the text by finding column descriptions. A column description contains the name of the column
-     * prefixed by "## " (without quotes).
+     * prefixed by "## " (without quotes) and surrounded by `.
      *
      * For example, for a column named something_useful, its column description would look like this:
      *
-     * ## something_useful
+     * ## `something_useful`
      *
      * @param array $lines an array of strings -- the lines of the text
      * @return array an array of strings containing the column names detected in text
      */
-    public static function detect_columns_in_text(array $lines): array {
+    public static function detect_columns_in_text(array $lines): array
+    {
         // array_values is used to reindex the array
         return array_values(preg_filter('/^## `([a-zA-Z0-9_]+)`/', '$1', $lines));
     }
