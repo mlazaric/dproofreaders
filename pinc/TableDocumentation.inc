@@ -104,10 +104,10 @@ class TableDocumentation
         $first_table_lines = [];
 
         foreach ($lines as $index => $line) {
-            if (startswith('|', $line)) {
+            if (startswith($line, '|')) {
                 $first_table_lines[] = $line;
             }
-            else if (count($first_table_lines) > 0) {
+            elseif (count($first_table_lines) > 0) {
                 break;
             }
         }
