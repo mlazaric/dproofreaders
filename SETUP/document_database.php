@@ -37,7 +37,7 @@ if ($argv[1] === 'generate') {
         generate_files_for_all_tables($directory_path);
     }
     else {
-        generate_file_for_table($table_name, $directory_path . '/' . $table_name . '.md', $table_name);
+        generate_file_for_table($table_name, "$directory_path/$table_name.md", $table_name);
     }
 }
 else {
@@ -71,10 +71,10 @@ function run_operation_for_all_tables(string $directory_path, callable $operatio
 
             $was_projectid_table_generated = true;
 
-            $operation($table_name, $directory_path . '/$projectid.md', '$projectid');
+            $operation($table_name, "$directory_path/projectIDxxxxxxxxxxxxx.md", 'projectIDxxxxxxxxxxxxx');
         }
         else {
-            $operation($table_name, $directory_path . '/' . $table_name . '.md', $table_name);
+            $operation($table_name, "$directory_path/$table_name.md", $table_name);
         }
     }
 }
