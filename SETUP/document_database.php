@@ -102,7 +102,7 @@ function generate_file_for_table(string $table_name, string $file_path, string $
 
     $table_documentation = new TableDocumentation($display_name, $columns);
 
-    echo " - generating documentation for table '$table_name' to '$file_path'";
+    echo " - generating documentation for table '$table_name' to '$file_path'\n";
 
     file_put_contents($file_path, (string) $table_documentation);
 }
