@@ -36,7 +36,7 @@ class TableDocumentation
         }
 
         $lines = ['# ' . $this->display_name, ''];
-        $lines = array_merge($lines, create_markdown_table($columns, [ 'Field', 'Type', 'Null', 'Key', 'Default', 'Extra' ]));
+        $lines = array_merge($lines, TableDocumentation::create_markdown_table($columns, [ 'Field', 'Type', 'Null', 'Key', 'Default', 'Extra' ]));
 
         // Add column definitions
         foreach ($columns as $index => $column_information) {
