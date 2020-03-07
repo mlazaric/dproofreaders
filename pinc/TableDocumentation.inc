@@ -160,7 +160,7 @@ class TableDocumentation
             if (startswith($line, '|') && !$finished_table) {
                 $reached_table = true;
             }
-            elseif ($reached_table) {
+            elseif ($reached_table && !$finished_table) {
                 $finished_table = true;
                 $lines_with_new_table = array_merge($lines_with_new_table, $new_table);
             }
