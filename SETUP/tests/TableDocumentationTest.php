@@ -1,84 +1,17 @@
 <?php
 
-$columns_per_table = [
-    'table1' => [
-        [ 'Field' => 'field1', 'Type' => 'type1', 'Null' => 'null1', 'Key' => 'key1', 'Default' => 'default1', 'Extra' => 'extra1' ],
-        [ 'Field' => 'field2', 'Type' => 'type2', 'Null' => 'null2', 'Key' => 'key2', 'Default' => 'default2', 'Extra' => 'extra2' ],
-        [ 'Field' => 'field3', 'Type' => 'type3', 'Null' => 'null3', 'Key' => 'key3', 'Default' => 'default3', 'Extra' => 'extra3' ],
-    ],
-    'table2' => [
-        [ 'Field' => 'field1', 'Type' => 'type1', 'Null' => 'null1', 'Key' => 'key1', 'Default' => 'default1', 'Extra' => 'extra1' ],
-        [ 'Field' => 'field2', 'Type' => 'type2', 'Null' => 'null2', 'Key' => 'key2', 'Default' => 'default2', 'Extra' => 'extra2' ],
-        [ 'Field' => 'field3', 'Type' => 'type3', 'Null' => 'null3', 'Key' => 'key3', 'Default' => 'default3', 'Extra' => 'extra3' ],
-    ],
-    'projectIDabcd' => [
-        [ 'Field' => 'field1', 'Type' => 'type1', 'Null' => 'null1', 'Key' => 'key1', 'Default' => 'default1', 'Extra' => 'extra1' ],
-        [ 'Field' => 'field2', 'Type' => 'type2', 'Null' => 'null2', 'Key' => 'key2', 'Default' => 'default2', 'Extra' => 'extra2' ],
-        [ 'Field' => 'field3', 'Type' => 'type3', 'Null' => 'null3', 'Key' => 'key3', 'Default' => 'default3', 'Extra' => 'extra3' ],
-    ],
-];
-
-$table_names_in_database = [ [ 'table1' ], [ 'projectIDabcd' ] ];
-
-$write_to_path_storage = [
-    'filename' => 'contents'
-];
-
 
 class TableDocumentationTest extends PHPUnit\Framework\TestCase
 {
+    private const TABLE_DESCRIPTION = [
+        [ 'Field' => 'field1', 'Type' => 'type1', 'Null' => 'null1', 'Key' => 'key1', 'Default' => 'default1', 'Extra' => 'extra1' ],
+        [ 'Field' => 'field2', 'Type' => 'type2', 'Null' => 'null2', 'Key' => 'key2', 'Default' => 'default2', 'Extra' => 'extra2' ],
+        [ 'Field' => 'field3', 'Type' => 'type3', 'Null' => 'null3', 'Key' => 'key3', 'Default' => 'default3', 'Extra' => 'extra3' ],
+    ];
 
-    // generate_files_for_all_tables
-    public function testGenerateFilesForAllTables() {
-        global $write_to_path_storage;
-
-        generate_files_for_all_tables('docs');
-
-        $result = $write_to_path_storage;
-
-        $this->assertEquals([
-            'docs/table1.md' => implode("\n", [
-                '# table1',
-                '',
-                '|Field            |Type |Null |Key |Default |Extra |',
-                '|-----------------|-----|-----|----|--------|------|',
-                '|[field1](#field1)|type1|null1|key1|default1|extra1|',
-                '|[field2](#field2)|type2|null2|key2|default2|extra2|',
-                '|[field3](#field3)|type3|null3|key3|default3|extra3|',
-                '',
-                '## field1',
-                '',
-                '## field2',
-                '',
-                '## field3',
-                '',
-            ]),
-            'docs/$projectid.md' => implode("\n", [
-                '# $projectid',
-                '',
-                '|Field            |Type |Null |Key |Default |Extra |',
-                '|-----------------|-----|-----|----|--------|------|',
-                '|[field1](#field1)|type1|null1|key1|default1|extra1|',
-                '|[field2](#field2)|type2|null2|key2|default2|extra2|',
-                '|[field3](#field3)|type3|null3|key3|default3|extra3|',
-                '',
-                '## field1',
-                '',
-                '## field2',
-                '',
-                '## field3',
-                '',
-            ])
-        ], $result);
-    }
-
-    // generate_file_for_table
-    public function testGenerateFileForTableForNormalTable() {
-        global $write_to_path_storage;
-
-        generate_file_for_table('table1', 'table1.md', 'display_table1');
-
-        $result = $write_to_path_storage['table1.md'];
+    // to string
+    public function testToStringForNormalTable() {
+        $table_documentation = TableDocumentation::from_table_description('display_table1', self::TABLE_DESCRIPTION);
 
         $this->assertEquals(implode("\n", [
             '# display_table1',
@@ -95,7 +28,7 @@ class TableDocumentationTest extends PHPUnit\Framework\TestCase
             '',
             '## field3',
             '',
-        ]), $result);
+        ]), (string) $table_documentation);
     }
 
     // create_markdown_table
