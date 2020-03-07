@@ -11,7 +11,7 @@ class TableDocumentationTest extends PHPUnit\Framework\TestCase
 
     // to string
     public function testToStringForNormalTable() {
-        $table_documentation = TableDocumentation::from_table_description('display_table1', self::TABLE_DESCRIPTION);
+        $table_documentation = new TableDocumentation('display_table1', self::TABLE_DESCRIPTION);
 
         $this->assertEquals(implode("\n", [
             '# `display_table1`',

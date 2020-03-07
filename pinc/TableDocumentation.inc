@@ -12,46 +12,7 @@ class TableDocumentation
         $this->columns_information = $columns_information;
     }
 
-    public static function from_table_description(string $display_name, array $table_description): TableDocumentation
-    {
-        return new TableDocumentation($display_name, $table_description);
-    }
-
-    public static function from_string(string $to_parse): TableDocumentation
-    {
-        $lines = explode("\n", $to_parse);
-
-        $display_name = preg_replace('/^# `([$a-zA-Z0-9_]+)`$/', $lines[0]);
-
-        $table_lines = TableDocumentation::detect_first_table_in_text($lines);
-        $headers = [];
-        $columns_information = [];
-
-        foreach ($table_lines as $index => $line) {
-            if ($index === 0) {
-                // First row contains headers
-                $headers = array_splice(explode('|', $line), 1, -1);
-            }
-            else if ($index === 1) {
-                // Second row is |-----|----|
-                continue;
-            }
-            else {
-                $row = array_splice(explode('|', $line), 1, -1);
-                $column_information = [];
-
-                foreach ($headers as $header_index => $header) {
-                    $column_information[$header] = $row[$header_index];
-                }
-
-                $columns_information[] = $column_information;
-            }
-        }
-
-        return new TableDocumentation($display_name, $columns_information);
-    }
-
-    public function __toString(): string
+    public function generate_documentation_table(): string
     {
         $columns_information = $this->columns_information;
 
@@ -63,18 +24,33 @@ class TableDocumentation
             $columns_information[$index]['Field'] = "[`$field`](#$field)";
         }
 
-        $lines = ['# `' . $this->display_name, '`'];
-        $lines = array_merge($lines, TableDocumentation::create_markdown_table($columns_information, [ 'Field', 'Type', 'Null', 'Key', 'Default', 'Extra' ]));
+        return implode('\n',
+            TableDocumentation::create_markdown_table($columns_information,
+                [ 'Field', 'Type', 'Null', 'Key', 'Default', 'Extra' ]));
+    }
+
+    public function generate_column_definitions(): string
+    {
+        $lines = [];
 
         // Add column definitions
-        foreach ($columns_information as $index => $column_information) {
+        foreach ($this->columns_information as $index => $column_information) {
+            $lines[] = '## `' . $column_information['Field'] . '`';
             $lines[] = '';
-            $lines[] = '## `' . $column_information['Name'] . '`';
         }
 
-        $lines[] = '';
-
         return implode("\n", $lines);
+    }
+
+    public function __toString(): string
+    {
+        return implode("\n", [
+            '# `' . $this->display_name . '`',
+            '',
+            $this->generate_documentation_table(),
+            '',
+            $this->generate_column_definitions(),
+        ]);
     }
 
     /**

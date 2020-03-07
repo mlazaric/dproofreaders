@@ -100,7 +100,7 @@ function generate_files_for_all_tables(string $directory_path) {
 function generate_file_for_table(string $table_name, string $file_path, string $display_name) {
     $columns = query_columns_for_table($table_name);
 
-    $table_documentation = TableDocumentation::from_table_description($display_name, $columns);
+    $table_documentation = new TableDocumentation($display_name, $columns);
 
     file_put_contents($file_path, (string) $table_documentation);
 }
