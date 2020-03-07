@@ -19,8 +19,6 @@ class TableDocumentation
         // Add hyper links to field names
         foreach ($columns_information as $index => $column_information) {
             $field = $column_information['Field'];
-
-            $columns_information[$index]['Name'] = $field; // Save field name before adding the hyper link for column definition
             $columns_information[$index]['Field'] = "[`$field`](#$field)";
         }
 
@@ -100,6 +98,12 @@ class TableDocumentation
         return $output_table;
     }
 
+    /**
+     * Detects the first markdown table in the text.
+     *
+     * @param array $lines an array of strings -- the lines of the text
+     * @return array an array of strings containing the first markdown table in the text
+     */
     public static function detect_first_table_in_text(array $lines): array {
         $first_table_lines = [];
 
