@@ -163,6 +163,7 @@ class TableDocumentation
             elseif ($reached_table && !$finished_table) {
                 $finished_table = true;
                 $lines_with_new_table = array_merge($lines_with_new_table, $new_table);
+                $lines_with_new_table[] = $line;
             }
             else {
                 $lines_with_new_table[] = $line;
