@@ -129,7 +129,7 @@ class TableDocumentation
                     $should_delete_this_part = true;
                 }
             }
-            elseif (!$should_delete_this_part) {
+            if (!$should_delete_this_part) {
                 $lines_with_updated_column_definitions[] = $line;
             }
         }
