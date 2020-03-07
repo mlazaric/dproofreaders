@@ -3,7 +3,7 @@
 
 class TableDocumentationTest extends PHPUnit\Framework\TestCase
 {
-    private const TABLE_DESCRIPTION = [
+    const TABLE_DESCRIPTION = [
         [ 'Field' => 'field1', 'Type' => 'type1', 'Null' => 'null1', 'Key' => 'key1', 'Default' => 'default1', 'Extra' => 'extra1' ],
         [ 'Field' => 'field2', 'Type' => 'type2', 'Null' => 'null2', 'Key' => 'key2', 'Default' => 'default2', 'Extra' => 'extra2' ],
         [ 'Field' => 'field3', 'Type' => 'type3', 'Null' => 'null3', 'Key' => 'key3', 'Default' => 'default3', 'Extra' => 'extra3' ],
@@ -18,15 +18,15 @@ class TableDocumentationTest extends PHPUnit\Framework\TestCase
             '',
             '|Field            |Type |Null |Key |Default |Extra |',
             '|-----------------|-----|-----|----|--------|------|',
-            '|[field1](#field1)|type1|null1|key1|default1|extra1|',
-            '|[field2](#field2)|type2|null2|key2|default2|extra2|',
-            '|[field3](#field3)|type3|null3|key3|default3|extra3|',
+            '|[`field1`](#field1)|type1|null1|key1|default1|extra1|',
+            '|[`field2`](#field2)|type2|null2|key2|default2|extra2|',
+            '|[`field3`](#field3)|type3|null3|key3|default3|extra3|',
             '',
-            '## field1',
+            '## `field1`',
             '',
-            '## field2',
+            '## `field2`',
             '',
-            '## field3',
+            '## `field3`',
             '',
         ]), (string) $table_documentation);
     }
