@@ -24,7 +24,7 @@ class TableDocumentation
             $columns_information[$index]['Field'] = "[`$field`](#$field)";
         }
 
-        return implode('\n',
+        return implode("\n",
             TableDocumentation::create_markdown_table($columns_information,
                 [ 'Field', 'Type', 'Null', 'Key', 'Default', 'Extra' ]));
     }
