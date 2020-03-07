@@ -236,7 +236,7 @@ function update_file_for_table(string $table_name, string $file_path, string $di
     $lines = explode("\n", $documentation_text);
 
     // Regenerate field table
-    $lines = TableDocumentation::replace_first_table($lines, $table_documentation->generate_documentation_table());
+    $lines = TableDocumentation::replace_first_table($lines, [$table_documentation->generate_documentation_table()]);
 
     // Add/remove field definitions
     $column_definitions_from_table = $table_documentation->get_column_names();
