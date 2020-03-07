@@ -31,8 +31,8 @@ class TableDocumentation
         foreach ($columns_information as $index => $column_information) {
             $field = $column_information['Field'];
 
-            $columns[$index]['Name'] = $field; // Save field name before adding the hyper link for column definition
-            $columns[$index]['Field'] = "[`$field`](#$field)";
+            $columns_information[$index]['Name'] = $field; // Save field name before adding the hyper link for column definition
+            $columns_information[$index]['Field'] = "[`$field`](#$field)";
         }
 
         $lines = ['# ' . $this->display_name, ''];
